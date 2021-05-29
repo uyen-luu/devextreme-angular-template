@@ -7,20 +7,17 @@ import {
   LoginFormComponent,
   ResetPasswordFormComponent
 } from '@app/shared/components';
-import { HomeComponent } from './pages/home/home.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 
 const routes: Routes = [
   {
     path: 'tasks',
-    component: TasksComponent,
+    loadChildren: () => import('./modules/tasks/tasks.module').then(m => m.TasksModule),
     canActivate: [ AuthGuardService ]
   },
   {
     path: 'profile',
-    component: ProfileComponent,
+    loadChildren: () => import('./modules/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [ AuthGuardService ]
   },
   {
@@ -58,6 +55,6 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
-  declarations: [HomeComponent, ProfileComponent, TasksComponent]
+  declarations: []
 })
 export class AppRoutingModule { }

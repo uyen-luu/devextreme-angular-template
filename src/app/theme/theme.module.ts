@@ -1,9 +1,9 @@
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {
-  DxButtonModule, DxContextMenuModule,
+  DxButtonModule, DxContextMenuModule, DxDataGridModule,
   DxDrawerModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxLoadPanelModule, DxPopoverModule, DxPopupModule,
   DxScrollViewModule,
   DxToolbarModule,
@@ -32,7 +32,8 @@ const DEVEXTREME_MODULES = [
   DxDrawerModule,
   DxScrollViewModule,
   DxFormModule,
-  DxLoadIndicatorModule
+  DxLoadIndicatorModule,
+  DxDataGridModule
 ];
 //
 const BASE_MODULES = [
