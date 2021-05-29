@@ -9,7 +9,9 @@
       ],
       "@app/*": ["app/*"],
       "@app/services": ["app/shared/services/index.ts"],
-      "@app/services": ["app/shared/services/index.ts"]
+      "@app/themes": [
+        "app/themes"
+      ]
     }
   },
   "files": [

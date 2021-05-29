@@ -1,0 +1,11 @@
+{
+  "items": [],
+  "baseTheme": "material.teal.light.compact",
+  "assetsBasePath": "../../../../node_modules/devextreme/dist/css/",
+  "outputColorScheme": "base",
+  "base": true,
+  "makeSwatch": false,
+  "version": "21.1.3",
+  "widgets": [],
+  "removeExternalResources": false
+}

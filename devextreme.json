@@ -5,28 +5,28 @@
       {
         "command": "build-theme",
         "options": {
-          "inputFile": "src/themes/metadata.base.json",
-          "outputFile": "src/themes/generated/theme.base.css"
+          "inputFile": "src/assets/styles/devextreme/metadata.base.json",
+          "outputFile": "src/assets/styles/devextreme/theme.base.css"
         }
       },      {
         "command": "build-theme",
         "options": {
-          "inputFile": "src/themes/metadata.additional.json",
-          "outputFile": "src/themes/generated/theme.additional.css"
+          "inputFile": "src/assets/styles/devextreme/metadata.additional.json",
+          "outputFile": "src/assets/styles/devextreme/theme.additional.css"
         }
       },
       {
         "command": "export-theme-vars",
         "options": {
-          "inputFile": "src/themes/metadata.base.json",
-          "outputFile": "src/themes/generated/variables.base.scss"
+          "inputFile": "src/assets/styles/devextreme/metadata.base.json",
+          "outputFile": "src/assets/styles/devextreme/variables.base.scss"
         }
       },
       {
         "command": "export-theme-vars",
         "options": {
-          "inputFile": "src/themes/metadata.additional.json",
-          "outputFile": "src/themes/generated/variables.additional.scss"
+          "inputFile": "src/assets/styles/devextreme/metadata.additional.json",
+          "outputFile": "src/assets/styles/devextreme/variables.additional.scss"
         }
       }
     ]
