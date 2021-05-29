@@ -1,0 +1,27 @@
+<dx-popover #popover
+			class="popover-title"
+			[position]="position"
+			[width]="width"
+			[showTitle]="!!title"
+			[title]="title"
+			[showCloseButton]="true"
+			[shading]="false"
+			(onHidden)="onHidden()">
+	<div *dxTemplate="let data of 'title'">
+		<app-popover-title [title]="title" (onClose)="hide()"></app-popover-title>
+	</div>
+	<div *dxTemplate="let data of 'content'">
+		<div class="d-flex justify-content-center mb-1 confirm-box">
+			<div>
+				<div class="text-center mb-3" [innerHTML]="message">
+				</div>
+				<div class="button-confirm text-center">
+					<dx-button text="{{'Yes'  }}" [type]="yesButtonType" class="mr-2" (onClick)="confirm()">
+					</dx-button>
+					<dx-button text="{{'No'}}" class="ml-2" (onClick)="cancel()">
+					</dx-button>
+				</div>
+			</div>
+		</div>
+	</div>
+</dx-popover>

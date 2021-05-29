@@ -1,0 +1,50 @@
+<ng-template #defaultTemplate>
+</ng-template>
+
+<dx-load-panel *ngIf="isRendering"
+			   [visible]="true"
+			   shadingColor="#ffffffcc"
+			   [showIndicator]="true"
+			   [shading]="false"
+			   [showPane]="true">
+</dx-load-panel>
+
+<dx-popup #popup class="component-popup"
+		  [class.fixed-footer]="!!footerTemplate"
+		  [class.auto-height]="height === 'auto'"
+		  [dragEnabled]="dragEnabled"
+		  [(title)]="title"
+		  [width]="width" [height]="height"
+		  [shading]="shading"
+		  [(fullScreen)]="isFullScreenPopup"
+		  [(showCloseButton)]="showCloseButton"
+		  [(visible)]="visible"
+		  (onHiding)="onPopupHiding($event)"
+		  (onHidden)="onPopupHidden($event)"
+		  (onShowing)="onPopupShowing($event)"
+		  (onShown)="onPopupShowed($event)">
+	<div *dxTemplate="let data of 'content'">
+		<div class="popup-container" (window:resize)="onResize()">
+			<div class="popup-content-header" *ngIf="headerTemplate">
+				<ng-container [ngTemplateOutlet]="headerTemplate ? headerTemplate: defaultTemplate"></ng-container>
+			</div>
+
+			<div class="popup-content-body">
+				<dx-scroll-view #scrollView
+								class="popup-container-scroll-view"
+								direction="vertical"
+								showScrollbar="always">
+					<div class="popup-content-wrapper" [class.fixed-height]="!autoContentContainerHeight">
+						<ng-content></ng-content>
+					</div>
+				</dx-scroll-view>
+			</div>
+
+			<div class="popup-content-footer" *ngIf="footerTemplate">
+				<div class="popup-footer-wrapper">
+					<ng-container [ngTemplateOutlet]="footerTemplate ? footerTemplate: defaultTemplate"></ng-container>
+				</div>
+			</div>
+		</div>
+	</div>
+</dx-popup>
