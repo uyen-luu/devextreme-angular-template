@@ -2,8 +2,9 @@
 
 :host {
   display: block;
-  color: rgba($base-text-color, alpha($base-text-color) * 0.7);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding-top: 20px;
-  padding-bottom: 24px;
+  color: #cacaca;
+  border-top: 1px solid rgba(202, 202, 202, 0.3);
+  text-align: center;
+  vertical-align: middle;
+  line-height: 40px;
 }

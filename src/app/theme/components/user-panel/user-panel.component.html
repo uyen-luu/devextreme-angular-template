@@ -1,7 +1,7 @@
 <div class="user-panel">
   <div class="user-info">
     <div class="image-container">
-      <div class="user-image"></div>
+      <div class="user-image" [style.background-image]="'url(' + user.avatarUrl+')'"></div>
     </div>
     <div class="user-name">{{user.email}}</div>
   </div>
@@ -10,7 +10,7 @@
     [items]="menuItems"
     target=".user-button"
     showEvent="dxclick"
-    width="210px"
+    width="100%"
     [position]="{ my: 'top center', at: 'bottom center' }"
     cssClass="user-menu">
   </dx-context-menu>

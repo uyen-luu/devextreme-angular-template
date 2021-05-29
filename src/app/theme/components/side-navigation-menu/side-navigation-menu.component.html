@@ -1,6 +1,6 @@
 <ng-content></ng-content>
 
-<div class="menu-container">
+<div class="menu-container d-flex flex-column">
   <dx-tree-view
     [items]="items"
     keyExpr="path"
@@ -11,13 +11,7 @@
     width="100%">
   </dx-tree-view>
 
-  <!--  <app-footer>-->
-  <!--    Copyright © {{appInfo.currentYear}} {{appInfo.author}}-->
-  <!--  </app-footer>-->
-<!--  <li class="dx-treeview-node dx-treeview-item-without-checkbox dx-treeview-node-is-leaf" data-item-id="/home"-->
-<!--      role="treeitem" aria-label="Home" aria-expanded="true" aria-level="1" aria-selected="false">-->
-<!--    <div class="dx-item dx-treeview-item">-->
-<!--      <div class="dx-item-content dx-treeview-item-content"><i class="dx-icon dx-icon-home"></i><span>Home</span></div>-->
-<!--    </div>-->
-<!--  </li>-->
+  <app-footer>
+    Copyright © {{appInfo.currentYear}} {{appInfo.author}}
+  </app-footer>
 </div>
