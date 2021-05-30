@@ -15,13 +15,17 @@ html, body {
   line-height: 1.5;
 
   h2 {
-    font-size: 30px;
-    margin: 10px 20px;
+    font-size: 20px;
+    margin: 10px 10px;
+    height: 30px;
+    line-height: 30px;
+    color: $base-accent;
+    font-weight: 400;
   }
 }
 
 .content-block {
-  margin: 5px 20px;
+  margin: 5px 10px;
 
   .screen-x-small & {
     margin: 2px;
@@ -61,4 +65,10 @@ html, body {
 }
 
 $side-panel-min-width: 40px;
+
+dx-data-grid{
+  .dx-pager{
+    padding: 5px 10px;
+  }
+}
 

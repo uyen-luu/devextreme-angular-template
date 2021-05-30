@@ -1,0 +1,5 @@
+::ng-deep .task__container{
+  dx-data-grid{
+    max-height: calc(100vh - 105px);
+  }
+}
