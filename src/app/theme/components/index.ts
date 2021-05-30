@@ -5,3 +5,5 @@ export * from './user-panel/user-panel.component';
 export * from './popover-title/popover-title.component';
 export * from './popover-confirm-box/popover-confirm-box.component';
 export * from './popup-container/popup-container.component';
+export * from './error/error.component';
+export * from './forbidden/forbidden.component';

@@ -23,6 +23,8 @@ import {
   SideNavOuterToolbarComponent,
   SingleCardComponent, UnauthenticatedContentComponent
 } from './layouts';
+import { ErrorComponent } from './components/error/error.component';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 
 const DEVEXTREME_MODULES = [
@@ -61,7 +63,9 @@ const COMPONENTS = [
   UserPanelComponent,
   PopoverConfirmBoxComponent,
   PopupContainerComponent,
-  PopoverTitleComponent
+  PopoverTitleComponent,
+  ErrorComponent,
+  ForbiddenComponent
 ];
 
 //

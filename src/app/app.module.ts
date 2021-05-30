@@ -1,6 +1,6 @@
 import {HttpClientModule} from '@angular/common/http';
 import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from '@app/app-routing.module';
 import {AppComponent} from '@app/app.component';
@@ -8,6 +8,8 @@ import {AppLoadService} from '@app/services';
 import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
 import {SharedModule} from '@app/shared/shared.module';
 import {ThemeModule} from '@app/theme/theme.module';
+import {AppStorage} from '@app/utilities';
+import {JwtModule} from '@auth0/angular-jwt';
 
 export function initializeApp(injector: Injector) {
   return (): Promise<any> => {
@@ -17,9 +19,7 @@ export function initializeApp(injector: Injector) {
 }
 
 export function accessTokenGetter() {
-  return localStorage.getItem(ACCESS_TOKEN_KEY) ? decodeURIComponent(
-    atob(localStorage.getItem(ACCESS_TOKEN_KEY))
-  ) : null;
+  return AppStorage.getTokenData(ACCESS_TOKEN_KEY);
 }
 
 @NgModule({
@@ -32,7 +32,18 @@ export function accessTokenGetter() {
     HttpClientModule,
     SharedModule.forRoot(),
     AppRoutingModule,
-    ThemeModule
+    ThemeModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: accessTokenGetter,
+        disallowedRoutes: [
+          new RegExp('\/assets\/.*'),
+          new RegExp('\/login\/.*')
+        ],
+        skipWhenExpired: true,
+        throwNoTokenError: true
+      }
+    })
   ],
   providers: [
     {
@@ -44,4 +55,5 @@ export function accessTokenGetter() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

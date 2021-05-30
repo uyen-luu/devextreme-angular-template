@@ -7,9 +7,10 @@ import {
   LoginFormComponent,
   ResetPasswordFormComponent
 } from '@app/shared/components';
-import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
+import {ErrorComponent} from '@app/theme/components';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
   {
     path: 'tasks',
     loadChildren: () => import('./modules/tasks/tasks.module').then(m => m.TasksModule),
@@ -45,14 +46,11 @@ const routes: Routes = [
     component: ChangePasswordFormComponent,
     canActivate: [ AuthGuardService ]
   },
-  {
-    path: '**',
-    redirectTo: 'home'
-  }
+  {path: '**', component: ErrorComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule],
+  imports: [RouterModule.forRoot(routes, { useHash: false })],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: []
