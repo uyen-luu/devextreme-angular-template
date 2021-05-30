@@ -1,27 +1,22 @@
-import {HttpClientModule} from '@angular/common/http';
-import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from '@app/app-routing.module';
 import {AppComponent} from '@app/app.component';
-import {AppLoadService} from '@app/services';
+import {NoopInterceptor} from '@app/utilities/http-interceptors';
+import {AuthService} from '@app/services';
 import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
 import {SharedModule} from '@app/shared/shared.module';
 import {ThemeModule} from '@app/theme/theme.module';
 import {AppStorage} from '@app/utilities';
-import {JwtModule} from '@auth0/angular-jwt';
-
-export function initializeApp(injector: Injector) {
-  return (): Promise<any> => {
-    const appInitService = injector.get(AppLoadService);
-    return appInitService.initApp();
-  };
-}
-
+import {appInitializer} from '@app/utilities/http-interceptors/app.initializer';
+import {JwtHelperService, JwtModule} from '@auth0/angular-jwt';
+//
 export function accessTokenGetter() {
   return AppStorage.getTokenData(ACCESS_TOKEN_KEY);
 }
-
+//
 @NgModule({
   declarations: [
     AppComponent
@@ -46,12 +41,8 @@ export function accessTokenGetter() {
     })
   ],
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApp,
-      deps: [Injector],
-      multi: true
-    }
+    {provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthService, JwtHelperService]},
+    {provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import {Observable, of} from 'rxjs';
 
 const defaultPath = '/';
 const defaultUser = {
@@ -113,6 +114,10 @@ export class AuthService {
   async logOut() {
     this._user = null;
     this.router.navigate(['/login-form']);
+  }
+
+  refreshToken(): Observable<any>{
+    return of();
   }
 }
 

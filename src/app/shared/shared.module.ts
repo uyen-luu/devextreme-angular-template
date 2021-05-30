@@ -6,14 +6,13 @@ import {
   LoginFormComponent,
   ResetPasswordFormComponent
 } from './components';
-import {AppInfoService, AppLoadService, AuthService, ScreenService} from './services';
+import {AppInfoService, AuthService, ScreenService} from './services';
 
 
 const PROVIDERS = [
   AppInfoService,
   AuthService,
-  ScreenService,
-  AppLoadService
+  ScreenService
 ];
 
 const COMPONENTS = [
@@ -35,7 +34,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [...PROVIDERS],
-    } as ModuleWithProviders<SharedModule> ;
+      providers: [...PROVIDERS]
+    } as ModuleWithProviders<SharedModule>;
   }
 }
