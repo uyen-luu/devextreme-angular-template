@@ -4,6 +4,7 @@ import {
 } from '@angular/common/http';
 import {AuthService} from '@app/shared/services';
 import {AppNotify} from '@app/utilities';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -11,7 +12,7 @@ import {catchError} from 'rxjs/operators';
 /** Pass untouched request through to the next request handler. */
 @Injectable()
 export class NoopInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private jwtService: JwtHelperService){
 
   }
 
@@ -32,5 +33,5 @@ export class NoopInterceptor implements HttpInterceptor {
 }
 
 export const noopInterceptorProvider = [
-  { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true }
+  {provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true, deps: [AuthService, JwtHelperService]}
 ];

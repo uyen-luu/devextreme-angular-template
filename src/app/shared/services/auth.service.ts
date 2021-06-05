@@ -3,32 +3,34 @@ import {Injectable} from '@angular/core';
 import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
 import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
 import {UserModel} from '@app/shared/models';
+import {SetLoggedUser} from '@app/store/actions';
+import {IUser} from '@app/store/models';
+import {UserState} from '@app/store/states/user.state';
 import {AppStorage} from '@app/utilities';
+import {JwtHelperService} from '@auth0/angular-jwt';
 import {environment} from '@environment';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
+import {Store} from '@ngxs/store';
+import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 const defaultPath = '/';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  private userSubject: BehaviorSubject<UserModel>;
-  public user: Observable<UserModel>;
+  @SelectSnapshot(UserState.user) user: IUser;
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private store: Store,
+    private jwtHelper: JwtHelperService
   ) {
-    this.userSubject = new BehaviorSubject<UserModel>(null);
-    this.user = this.userSubject.asObservable();
   }
 
-  public get userValue(): UserModel {
-    return this.userSubject.value;
-  }
 
   get loggedIn(): boolean {
-    return !!this.userValue;
+    return !!this.user;
   }
 
   private _lastAuthenticatedPath: string = defaultPath;
@@ -43,7 +45,7 @@ export class AuthService {
     }, {withCredentials: true})
       .pipe(map(user => {
         AppStorage.storeTokenData(ACCESS_TOKEN_KEY, user.jwtToken);
-        this.userSubject.next(user);
+        this.store.dispatch(new SetLoggedUser(user));
         this.startRefreshTokenTimer();
         this.router.navigate([this._lastAuthenticatedPath]);
         return user;
@@ -51,23 +53,28 @@ export class AuthService {
   }
 
   logOut() {
-    this.http.post<any>(`${environment.apiUrl}/user/revoke-token`, {}, {withCredentials: true}).subscribe();
-    this.stopRefreshTokenTimer();
-    this.userSubject.next(null);
-    this.router.navigate(['/login-form']);
+    this.http.post<any>(`${environment.apiUrl}/user/revoke-token`, {}, {withCredentials: true}).subscribe(() =>{
+      this.stopRefreshTokenTimer();
+      AppStorage.storeTokenData(ACCESS_TOKEN_KEY, '');
+      this.store.dispatch(new SetLoggedUser(null));
+      this.router.navigate(['/login-form']);
+    })
   }
 
   refreshToken() {
     return this.http.post<any>(`${environment.apiUrl}/user/refresh-token`, {}, {withCredentials: true})
       .pipe(map((user) => {
-        this.userSubject.next(user);
+        this.store.dispatch(new SetLoggedUser(user));
         this.startRefreshTokenTimer();
         return user;
       }));
   }
 
-  getUser() {
-    return this.http.get<UserModel[]>(`${environment.apiUrl}/user`);
+  getUser(): Observable<UserModel> {
+    return this.http.get<UserModel>(`${environment.apiUrl}/user`).pipe(map((user) => {
+      this.store.dispatch(new SetLoggedUser(user));
+      return user;
+    }));
   }
 
   resetPassword(email: string) {
@@ -88,10 +95,7 @@ export class AuthService {
 
   private startRefreshTokenTimer() {
     // set a timeout to refresh the token a minute before it expires
-    const jwtToken = JSON.parse(atob(this.userValue.jwtToken.split('.')[1]));
-
-    // set a timeout to refresh the token a minute before it expires
-    const expires = new Date(jwtToken.exp * 1000);
+    const expires =  this.jwtHelper.getTokenExpirationDate();
     const timeout = expires.getTime() - Date.now() - (60 * 1000);
     this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
   }

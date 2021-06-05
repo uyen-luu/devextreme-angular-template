@@ -1,6 +1,8 @@
 import { Component} from '@angular/core';
 import { Router} from '@angular/router';
 import {AuthService} from '@app/shared/services';
+import {SetLoggedUser} from '@app/store/actions';
+import {Store} from '@ngxs/store';
 import {finalize} from 'rxjs/operators';
 //
 @Component({
@@ -12,7 +14,7 @@ export class LoginFormComponent {
   loading = false;
   formData: any = {};
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private store: Store) { }
 
   onSubmit(e) {
     e.preventDefault();
@@ -20,8 +22,7 @@ export class LoginFormComponent {
 
     this.loading = true;
     this.authService.logIn(email, password)
-      .pipe(finalize(() => this.loading = false)).subscribe(user => {
-    });
+      .pipe(finalize(() => this.loading = false)).subscribe();
   }
 
   onCreateAccountClick = () => {

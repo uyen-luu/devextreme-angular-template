@@ -7,7 +7,7 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 export function appInitializer(authService: AuthService, jwtService: JwtHelperService) {
   return () => {
     return new Promise((resolve, reject) => {
-      if (authService.loggedIn) {
+      if (!!jwtService.tokenGetter()) {
         if (jwtService.isTokenExpired()) {
           return authService.refreshToken()
             .subscribe((token) => {

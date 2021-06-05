@@ -1,14 +1,8 @@
-//
-export enum UserActionType {
-  GET_USER = '[USER] Get User',
-}
+import {UserModel} from '@app/shared/models';
 
-// export class GetUser implements Action {
-//   readonly type = UserActionType.GET_USER;
-//
-//   //add an optional payload
-//   constructor(public payload: UserModel) {
-//   }
-// }
-//
-// export type UserAction = UserActionType;
+export class SetLoggedUser {
+  static readonly type = '[USER] Set User';
+
+  constructor(public payload: UserModel ) {
+  }
+}

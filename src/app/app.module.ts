@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from '@app/app-routing.module';
 import {AppComponent} from '@app/app.component';
+import {UserState} from '@app/store/states/user.state';
 import {ThemeModule} from '@app/theme/theme.module';
 import {
   appInitializerProvider,
@@ -14,6 +15,11 @@ import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
 import {SharedModule} from '@app/shared/shared.module';
 import {AppStorage} from '@app/utilities';
 import {JwtModule} from '@auth0/angular-jwt';
+import {environment} from '@environment';
+import {NgxsSelectSnapshotModule} from '@ngxs-labs/select-snapshot';
+import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
+import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
+import {NgxsModule} from '@ngxs/store';
 
 //
 export function accessTokenGetter() {
@@ -40,7 +46,11 @@ export function accessTokenGetter() {
           new RegExp('\/login-form\/.*')
         ]
       }
-    })
+    }),
+    NgxsModule.forRoot([UserState], { developmentMode: !environment.production }),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot(),
+    NgxsSelectSnapshotModule.forRoot()
   ],
   providers: [
     appInitializerProvider,

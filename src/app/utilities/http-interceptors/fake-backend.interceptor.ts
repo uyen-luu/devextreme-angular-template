@@ -9,6 +9,8 @@ import {
 } from '@angular/common/http';
 import {EC, JWK, JWT} from '@app/shared/constant';
 import {UserModel} from '@app/shared/models';
+import {AuthService} from '@app/shared/services';
+import {JwtHelperService} from '@auth0/angular-jwt';
 import {from, Observable, of, throwError} from 'rxjs';
 import {delay, mergeMap, materialize, dematerialize, map} from 'rxjs/operators';
 
@@ -32,8 +34,18 @@ if (!users.length) {
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
+  constructor(private authService: AuthService, private jwtService: JwtHelperService) {
+  }
+
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const {url, method, headers, body} = request;
+    const isLoggedIn = () => {
+      return !this.jwtService.isTokenExpired();
+    };
+
+    const currentToken = () => {
+      return this.jwtService.tokenGetter();
+    };
 
     // wrap in delayed observable to simulate server api call
     return of(null)
@@ -69,7 +81,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       user.refreshTokens.push(generateRefreshToken());
       localStorage.setItem(usersKey, JSON.stringify(users));
 
-      return from(generateJwtToken()).pipe(map(jwtToken => {
+      return from(generateJwtToken(user)).pipe(map(jwtToken => {
         const body = new UserModel({
           id: user.id,
           username: user.username,
@@ -78,7 +90,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           avatarUrl: user.avatarUrl,
           jwtToken
         });
-        return new HttpResponse({status: 200, body})
+        return new HttpResponse({status: 200, body});
       }));
     }
 
@@ -96,7 +108,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       user.refreshTokens.push(generateRefreshToken());
       localStorage.setItem(usersKey, JSON.stringify(users));
 
-      return from(generateJwtToken()).pipe(map(jwtToken => {
+      return from(generateJwtToken(user)).pipe(map(jwtToken => {
         const body = new UserModel({
           id: user.id,
           username: user.username,
@@ -105,7 +117,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           avatarUrl: user.avatarUrl,
           jwtToken
         });
-        return new HttpResponse({status: 200, body})
+        return new HttpResponse({status: 200, body});
       }));
     }
 
@@ -124,7 +136,9 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
     function getUsers() {
       if (!isLoggedIn()) return unauthorized();
-      return ok(users);
+      const tokenInfo = JWT.parseJwt(currentToken());
+      const user = users.find(_ => _.id === tokenInfo.sub);
+      return ok(user);
     }
 
     // helper functions
@@ -141,14 +155,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       return throwError({status: 401, error: {message: 'Unauthorized'}});
     }
 
-    function isLoggedIn() {
-      return !this.jwtHelper.isTokenExpired();
-    }
-
-    function generateJwtToken(): Promise<string> {
+    function generateJwtToken(user: UserModel): Promise<string> {
       const claims = {
         iss: 'http://localhost:4200',
-        sub: 'userId',
+        sub: user.id,
         azp: 'appId',
         aud: 'http://localhost:4200',
         exp: Math.round(Date.now() / 1000) + 15 * 60
@@ -189,5 +199,6 @@ export const fakeBackendProvider = {
   // use fake backend in place of Http service for backend-less development
   provide: HTTP_INTERCEPTORS,
   useClass: FakeBackendInterceptor,
-  multi: true
+  multi: true,
+  deps: [AuthService, JwtHelperService]
 };

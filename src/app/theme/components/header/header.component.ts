@@ -2,7 +2,9 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {AuthService} from '@app/shared/services';
 
 import { Router } from '@angular/router';
-import {UserModel} from '@app/shared/models';
+import {IUser} from '@app/store/models';
+import {UserState} from '@app/store/states/user.state';
+import {SelectSnapshot} from '@ngxs-labs/select-snapshot';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -10,6 +12,7 @@ import {UserModel} from '@app/shared/models';
 })
 
 export class HeaderComponent implements OnInit {
+  @SelectSnapshot(UserState.user) currentUser: IUser;
   @Output()
   menuToggle = new EventEmitter<boolean>();
 
@@ -18,8 +21,6 @@ export class HeaderComponent implements OnInit {
 
   @Input()
   title: string;
-
-  user: UserModel = new UserModel();
 
   userMenuItems = [{
     text: 'Profile',
@@ -39,9 +40,6 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.user.subscribe( user => {
-      this.user = user;
-    });
   }
 
   toggleMenu = () => {
