@@ -1,4 +1,6 @@
-export class UserModel {
+import {IUser} from '@app/store/models';
+
+export class UserModel implements IUser{
   id: number;
   username: string;
   avatarUrl: string;

@@ -1,11 +1,9 @@
 import { Component} from '@angular/core';
 import { Router} from '@angular/router';
-import {AuthService} from '@app/services';
+import {AuthService} from '@app/shared/services';
 import {AppNotify} from '@app/utilities';
-import notify from 'devextreme/ui/notify';
 import {finalize} from 'rxjs/operators';
-
-
+//
 @Component({
   selector: 'app-create-account-form',
   templateUrl: './create-account-form.component.html',

@@ -1,31 +1,28 @@
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {
+  ErrorComponent,
+  FooterComponent, ForbiddenComponent,
+  HeaderComponent,
+  PopoverConfirmBoxComponent, PopoverTitleComponent, PopupContainerComponent,
+  SideNavigationMenuComponent,
+  UserPanelComponent
+} from '@app/theme/components';
+import {AutoFocusInputDirective} from '@app/theme/directives';
+import {
+  NotAuthorizedContainerComponent,
+  SideNavInnerToolbarComponent,
+  SideNavOuterToolbarComponent, SingleCardComponent, UnauthenticatedContentComponent
+} from '@app/theme/layouts';
 import {
   DxButtonModule, DxContextMenuModule, DxDataGridModule,
   DxDrawerModule, DxFormModule, DxListModule, DxLoadIndicatorModule, DxLoadPanelModule, DxPopoverModule, DxPopupModule,
   DxScrollViewModule,
   DxToolbarModule,
   DxTreeViewModule
-} from 'devextreme-angular';
-import {
-  FooterComponent,
-  HeaderComponent,
-  PopoverConfirmBoxComponent, PopoverTitleComponent, PopupContainerComponent,
-  SideNavigationMenuComponent,
-  UserPanelComponent
-} from './components';
-import {AutoFocusInputDirective} from './directives';
-import {
-  NotAuthorizedContainerComponent,
-  SideNavInnerToolbarComponent,
-  SideNavOuterToolbarComponent,
-  SingleCardComponent, UnauthenticatedContentComponent
-} from './layouts';
-import { ErrorComponent } from './components/error/error.component';
-import { ForbiddenComponent } from './components/forbidden/forbidden.component';
-
+} from 'devextreme-angular';;
 
 const DEVEXTREME_MODULES = [
   DxToolbarModule,

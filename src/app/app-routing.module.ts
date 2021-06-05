@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AuthGuardService} from '@app/services';
+import {AuthGuardService} from '@app/shared/services';
 import {
   ChangePasswordFormComponent,
   CreateAccountFormComponent,

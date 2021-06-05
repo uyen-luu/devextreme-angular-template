@@ -1,5 +1,5 @@
 import { Component, HostBinding } from '@angular/core';
-import {AppInfoService, AuthService, ScreenService} from '@app/services';
+import {AppInfoService, AuthService, ScreenService} from '@app/shared/services';
 
 @Component({
   selector: 'app-root',

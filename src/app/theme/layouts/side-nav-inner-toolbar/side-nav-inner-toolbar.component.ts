@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import {ScreenService} from '@app/services';
+import {ScreenService} from '@app/shared/services';
 
 import { Router, NavigationEnd } from '@angular/router';
 import {DxScrollViewComponent} from 'devextreme-angular';

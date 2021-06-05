@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {AuthGuardService} from '../../shared/services';
-import {SharedModule} from '../../shared/shared.module';
-import {ThemeModule} from '../../theme/theme.module';
-import {ProfileComponent} from './profile.component';
+import {ProfileComponent} from '@app/modules/profile/profile.component';
+import {SharedModule} from '@app/modules/shared';
+import {ThemeModule} from '@app/modules/theme';
+import {AuthGuardService} from '@app/shared/services';
 
 @NgModule({
   declarations: [

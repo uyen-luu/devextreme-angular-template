@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '@app/services';
+import {AuthService} from '@app/shared/services';
 import {AppNotify} from '@app/utilities';
-import notify from 'devextreme/ui/notify';
 import {finalize} from 'rxjs/operators';
 
-
 @Component({
-  selector: 'app-change-passsword-form',
+  selector: 'app-change-password-form',
   templateUrl: './change-password-form.component.html'
 })
 export class ChangePasswordFormComponent implements OnInit {

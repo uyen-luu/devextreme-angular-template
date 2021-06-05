@@ -4,9 +4,9 @@ import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
 import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
 import {UserModel} from '@app/shared/models';
 import {AppStorage} from '@app/utilities';
+import {environment} from '@environment';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
 
 const defaultPath = '/';
 

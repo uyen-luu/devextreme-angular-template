@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '@app/services';
+import {AuthService} from '@app/shared/services';
 import {AppNotify} from '@app/utilities';
-import notify from 'devextreme/ui/notify';
 import {finalize} from 'rxjs/operators';
-
+//
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
+//
 @Component({
   selector: 'app-reset-password-form',
   templateUrl: './reset-password-form.component.html',

@@ -1,5 +1,5 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {ThemeModule} from '../theme/theme.module';
+import {ThemeModule} from '@app/modules/theme';
 import {
   ChangePasswordFormComponent,
   CreateAccountFormComponent,

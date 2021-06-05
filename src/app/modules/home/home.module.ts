@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import {RouterModule} from "@angular/router";
-import {AuthGuardService} from '../../shared/services';
-import {SharedModule} from '../../shared/shared.module';
-import {HomeComponent} from './home.component';
+import {HomeComponent} from '@app/modules/home/home.component';
+import {SharedModule} from '@app/modules/shared';
+import {AuthGuardService} from '@app/shared/services';
 
 @NgModule({
   declarations: [

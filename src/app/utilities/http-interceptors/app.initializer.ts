@@ -1,8 +1,8 @@
 import {APP_INITIALIZER} from '@angular/core';
 import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
+import {AuthService} from '@app/shared/services';
 import {AppStorage} from '@app/utilities';
 import {JwtHelperService} from '@auth0/angular-jwt';
-import {AuthService} from '../../shared/services';
 
 export function appInitializer(authService: AuthService, jwtService: JwtHelperService) {
   return () => {

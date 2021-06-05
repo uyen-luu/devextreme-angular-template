@@ -1,7 +1,7 @@
-import { Component, NgModule, Output, Input, EventEmitter, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import {AppInfoService, ScreenService} from '@app/services';
+import { Component, Output, Input, EventEmitter, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import {AppInfoService} from '@app/shared/services';
 import {navigation} from 'app/app-navigation';
-import { DxTreeViewModule, DxTreeViewComponent } from 'devextreme-angular/ui/tree-view';
+import { DxTreeViewComponent } from 'devextreme-angular/ui/tree-view';
 
 import * as events from 'devextreme/events';
 

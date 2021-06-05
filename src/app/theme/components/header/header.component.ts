@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import {AuthService} from '@app/services';
+import {AuthService} from '@app/shared/services';
 
 import { Router } from '@angular/router';
 import {UserModel} from '@app/shared/models';
