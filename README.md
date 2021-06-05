@@ -73,6 +73,13 @@ npm start
 npm run test
 ```
 
+## Test account(Mock JWT without BE)
+
+```sh
+Username: it.luudinhuyen@gmail.com
+Password: 123456
+```
+
 ## Author
 
 👤 **Uyen Luu**
