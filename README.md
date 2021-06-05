@@ -6,7 +6,7 @@
   </a>
 </p>
 
-> This is thetemplate for Devextreme Angular app which was built base on Devextreme theme(provided by DevExpress Inc.)
+> This is the template for Devextreme Angular app which was built base on Devextreme theme(provided by DevExpress Inc.)
 
 ## Install
 
