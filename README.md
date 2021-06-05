@@ -1,16 +1,46 @@
-# DevExtreme Angular Template
+<h1 align="center">Welcome to Devextreme Angular Template 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <a href="https://github.com/uyen-luu/devextreme-angular-template/blob/master/LICENSE" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+</p>
 
-The DevExtreme Angular Template is an Angular application with a navigation menu and sample views in a responsive layout (see a [live preview](https://devexpress.github.io/devextreme-angular-template)). This application is created with [Angular CLI](https://github.com/angular/angular-cli) and uses [DevExtreme Angular components](https://js.devexpress.com/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/).
+> This is thetemplate for Devextreme Angular app which was built base on Devextreme theme(provided by DevExpress Inc.)
 
-![DevExtreme-Angular-Template](https://user-images.githubusercontent.com/20125410/93987795-ac890400-fd90-11ea-84d0-b7d3e8cc12fa.png)
+## Install
 
-## Getting Started
+```sh
+npm install
+```
 
-For more information about the DevExtreme Angular Template and how to customize it, refer to the following help topic: [Application Template](https://js.devexpress.com/Documentation/Guide/Angular_Components/Application_Template/).
+## Usage
 
-## License
+```sh
+npm start
+```
 
-**DevExtreme Angular Template is released as a MIT-licensed (free and open-source) add-on to DevExtreme.**
+## Run tests
 
-- [DevExtreme License](https://js.devexpress.com/Licensing/)
-- [Free trial](http://js.devexpress.com/Buy/)
+```sh
+npm run test
+```
+
+## Author
+
+👤 **Uyen Luu**
+
+* Github: [@uyen-luu](https://github.com/uyen-luu)
+* LinkedIn: [@uyen-luu](https://www.linkedin.com/in/uyen-luu/)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+Copyright © 2021 [Uyen Luu](https://github.com/uyen-luu).<br />
+This project is [MIT](https://github.com/uyen-luu/devextreme-angular-template/blob/master/LICENSE) licensed.
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
