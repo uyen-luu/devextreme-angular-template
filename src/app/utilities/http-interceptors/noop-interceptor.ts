@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {
-  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
+  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import {AuthService} from '@app/services';
-import {JwtHelperService} from '@auth0/angular-jwt';
 
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -12,17 +11,12 @@ import {AppNotify} from '../index';
 /** Pass untouched request through to the next request handler. */
 @Injectable()
 export class NoopInterceptor implements HttpInterceptor {
-  constructor(private jwtService: JwtHelperService, private authService: AuthService) {
+  constructor(private authService: AuthService) {
 
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
-    // TODO Add header if needed
-
-    if (this.jwtService.isTokenExpired()){
-
-    }
     return next.handle(req)
       .pipe(
         catchError((error) => {
@@ -31,8 +25,12 @@ export class NoopInterceptor implements HttpInterceptor {
             this.authService.logOut();
           }
           // TODO Handle error
-          AppNotify.error('Application Error');
-          return throwError(error.message);
+          AppNotify.error(error?.error?.message || 'Application Error');
+          return throwError(error.error);
         }));
   }
 }
+
+export const noopInterceptorProvider = [
+  { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true }
+];

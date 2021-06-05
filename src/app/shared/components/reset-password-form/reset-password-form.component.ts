@@ -1,7 +1,9 @@
-import { Component} from '@angular/core';
-import { Router} from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthService} from '@app/services';
+import {AppNotify} from '@app/utilities';
 import notify from 'devextreme/ui/notify';
+import {finalize} from 'rxjs/operators';
 
 const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
 
@@ -14,21 +16,21 @@ export class ResetPasswordFormComponent {
   loading = false;
   formData: any = {};
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   async onSubmit(e) {
     e.preventDefault();
-    const { email } = this.formData;
+    const {email} = this.formData;
     this.loading = true;
 
-    const result = await this.authService.resetPassword(email);
-    this.loading = false;
-
-    if (result.isOk) {
-      this.router.navigate(['/login-form']);
-      notify(notificationText, 'success', 2500);
-    } else {
-      notify(result.message, 'error', 2000);
-    }
+    await this.authService.resetPassword(email)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe(() => {
+        this.router.navigate(['/login-form']);
+        AppNotify.success(notificationText);
+      }, error => {
+        AppNotify.error(error);
+      });
   }
 }

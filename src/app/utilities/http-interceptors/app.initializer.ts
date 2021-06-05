@@ -1,20 +1,29 @@
+import {APP_INITIALIZER} from '@angular/core';
 import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
 import {AppStorage} from '@app/utilities';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {AuthService} from '../../shared/services';
 
-export function appInitializer(authenticationService: AuthService, jwtService: JwtHelperService) {
-  if (jwtService.isTokenExpired()) {
-    return () => new Promise(resolve => {
-      // attempt to refresh token on app start up to auto authenticate
-      authenticationService.refreshToken()
-        .subscribe((token) => {
-          AppStorage.storeTokenData(ACCESS_TOKEN_KEY, token);
-          return authenticationService.getUser();
-        })
-        .add(resolve);
+export function appInitializer(authService: AuthService, jwtService: JwtHelperService) {
+  return () => {
+    return new Promise((resolve, reject) => {
+      if (authService.loggedIn) {
+        if (jwtService.isTokenExpired()) {
+          return authService.refreshToken()
+            .subscribe((token) => {
+              AppStorage.storeTokenData(ACCESS_TOKEN_KEY, token);
+            })
+            .add(resolve);
+        } else {
+          return authService.getUser().subscribe().add(resolve);
+        }
+      } else {
+        resolve(null);
+      }
     });
-  } else {
-    return authenticationService.getUser();
-  }
+  };
 }
+
+export const appInitializerProvider = [
+  {provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthService, JwtHelperService]}
+];

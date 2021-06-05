@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '@app/services';
+import {AppNotify} from '@app/utilities';
 import notify from 'devextreme/ui/notify';
+import {finalize} from 'rxjs/operators';
 
 
 @Component({
@@ -26,14 +28,13 @@ export class ChangePasswordFormComponent implements OnInit {
     const { password } = this.formData;
     this.loading = true;
 
-    const result = await this.authService.changePassword(password, this.recoveryCode);
-    this.loading = false;
-
-    if (result.isOk) {
-      this.router.navigate(['/login-form']);
-    } else {
-      notify(result.message, 'error', 2000);
-    }
+    this.authService.changePassword(password, this.recoveryCode)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe(() => {
+        this.router.navigate(['/login-form']);
+      }, error => {
+        AppNotify.error(error)
+      });
   }
 
   confirmPassword = (e: { value: string }) => {

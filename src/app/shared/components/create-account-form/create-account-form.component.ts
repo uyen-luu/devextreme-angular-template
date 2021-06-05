@@ -1,7 +1,9 @@
 import { Component} from '@angular/core';
 import { Router} from '@angular/router';
 import {AuthService} from '@app/services';
+import {AppNotify} from '@app/utilities';
 import notify from 'devextreme/ui/notify';
+import {finalize} from 'rxjs/operators';
 
 
 @Component({
@@ -20,14 +22,13 @@ export class CreateAccountFormComponent {
     const { email, password } = this.formData;
     this.loading = true;
 
-    const result = await this.authService.createAccount(email, password);
-    this.loading = false;
-
-    if (result.isOk) {
-      this.router.navigate(['/login-form']);
-    } else {
-      notify(result.message, 'error', 2000);
-    }
+    this.authService.createAccount(email, password)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe(() => {
+        this.router.navigate(['/login-form']);
+      }, error => {
+        AppNotify.error(error)
+      });
   }
 
   confirmPassword = (e: { value: string }) => {

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {AuthService} from '@app/services';
 
 import { Router } from '@angular/router';
+import {UserModel} from '@app/shared/models';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title: string;
 
-  user = { email: '', avatarUrl: '' };
+  user: UserModel = new UserModel();
 
   userMenuItems = [{
     text: 'Profile',
@@ -38,7 +39,9 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.getUser().then((e) => this.user = e.data);
+    this.authService.user.subscribe( user => {
+      this.user = user;
+    });
   }
 
   toggleMenu = () => {

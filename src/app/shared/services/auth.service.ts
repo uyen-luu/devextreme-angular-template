@@ -1,18 +1,34 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {CanActivate, Router, ActivatedRouteSnapshot} from '@angular/router';
+import {ACCESS_TOKEN_KEY} from '@app/shared/constant';
+import {UserModel} from '@app/shared/models';
+import {AppStorage} from '@app/utilities';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 
 const defaultPath = '/';
-const defaultUser = {
-  email: 'it.luudinhuyen@gmail.com',
-  avatarUrl: 'assets/images/avatar.jpg'
-};
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthService {
-  private _user = defaultUser;
+  private userSubject: BehaviorSubject<UserModel>;
+  public user: Observable<UserModel>;
+
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {
+    this.userSubject = new BehaviorSubject<UserModel>(null);
+    this.user = this.userSubject.asObservable();
+  }
+
+  public get userValue(): UserModel {
+    return this.userSubject.value;
+  }
+
   get loggedIn(): boolean {
-    return !!this._user;
+    return !!this.userValue;
   }
 
   private _lastAuthenticatedPath: string = defaultPath;
@@ -20,110 +36,75 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
-
-  async logIn(email: string, password: string) {
-
-    try {
-      // Send request
-      console.log(email, password);
-      this._user = { ...defaultUser, email };
-      this.router.navigate([this._lastAuthenticatedPath]);
-
-      return {
-        isOk: true,
-        data: this._user
-      };
-    }
-    catch {
-      return {
-        isOk: false,
-        message: "Authentication failed"
-      };
-    }
+  logIn(username: string, password: string): Observable<UserModel> {
+    return this.http.post<UserModel>(`${environment.apiUrl}/user/authenticate`, {
+      username,
+      password
+    }, {withCredentials: true})
+      .pipe(map(user => {
+        AppStorage.storeTokenData(ACCESS_TOKEN_KEY, user.jwtToken);
+        this.userSubject.next(user);
+        this.startRefreshTokenTimer();
+        this.router.navigate([this._lastAuthenticatedPath]);
+        return user;
+      }));
   }
 
-  async getUser() {
-    try {
-      // Send request
-
-      return {
-        isOk: true,
-        data: this._user
-      };
-    }
-    catch {
-      return {
-        isOk: false
-      };
-    }
-  }
-
-  async createAccount(email, password) {
-    try {
-      // Send request
-      console.log(email, password);
-
-      this.router.navigate(['/create-account']);
-      return {
-        isOk: true
-      };
-    }
-    catch {
-      return {
-        isOk: false,
-        message: "Failed to create account"
-      };
-    }
-  }
-
-  async changePassword(email: string, recoveryCode: string) {
-    try {
-      // Send request
-      console.log(email, recoveryCode);
-
-      return {
-        isOk: true
-      };
-    }
-    catch {
-      return {
-        isOk: false,
-        message: "Failed to change password"
-      }
-    };
-  }
-
-  async resetPassword(email: string) {
-    try {
-      // Send request
-      console.log(email);
-
-      return {
-        isOk: true
-      };
-    }
-    catch {
-      return {
-        isOk: false,
-        message: "Failed to reset password"
-      };
-    }
-  }
-
-  async logOut() {
-    this._user = null;
+  logOut() {
+    this.http.post<any>(`${environment.apiUrl}/user/revoke-token`, {}, {withCredentials: true}).subscribe();
+    this.stopRefreshTokenTimer();
+    this.userSubject.next(null);
     this.router.navigate(['/login-form']);
   }
 
-  refreshToken(): Observable<any>{
+  refreshToken() {
+    return this.http.post<any>(`${environment.apiUrl}/user/refresh-token`, {}, {withCredentials: true})
+      .pipe(map((user) => {
+        this.userSubject.next(user);
+        this.startRefreshTokenTimer();
+        return user;
+      }));
+  }
+
+  getUser() {
+    return this.http.get<UserModel[]>(`${environment.apiUrl}/user`);
+  }
+
+  resetPassword(email: string) {
     return of();
+  }
+
+  createAccount(email: string, password: string) {
+    return of();
+  }
+
+  changePassword(password: string, recoveryCode) {
+    return of();
+  }
+
+  // helper methods
+
+  private refreshTokenTimeout;
+
+  private startRefreshTokenTimer() {
+    // set a timeout to refresh the token a minute before it expires
+    const jwtToken = JSON.parse(atob(this.userValue.jwtToken.split('.')[1]));
+
+    // set a timeout to refresh the token a minute before it expires
+    const expires = new Date(jwtToken.exp * 1000);
+    const timeout = expires.getTime() - Date.now() - (60 * 1000);
+    this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+  }
+
+  private stopRefreshTokenTimer() {
+    clearTimeout(this.refreshTokenTimeout);
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;

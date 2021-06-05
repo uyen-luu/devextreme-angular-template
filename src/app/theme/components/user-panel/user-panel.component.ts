@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import {UserModel} from '@app/shared/models';
 
 @Component({
   selector: 'app-user-panel',
@@ -14,7 +15,7 @@ export class UserPanelComponent {
   menuMode: string;
 
   @Input()
-  user: { email: string, avatarUrl: string };
+  user: UserModel;
 
   constructor() {}
 }
