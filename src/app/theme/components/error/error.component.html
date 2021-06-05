@@ -8,12 +8,17 @@
           An error occurred, the requested page could not be found.
         </div>
         <div class="error-actions">
-          <a routerLink="/" class="btn btn-primary btn-md">
-            Back to Home
-          </a>
-          <a href="/" class="btn btn-default btn-md" (click)="logout($event)">
-            Logout
-          </a>
+          <div class="dx-button dx-button-default dx-button-mode-contained dx-widget" tabindex="0" role="button"
+               style="width: 100%;">
+            <div routerLink="/" class="dx-button-content"><span
+              class="dx-button-text dx-template-wrapper">Back to Home</span><input
+              class="dx-button-submit-input"></div>
+          </div>
+          <div *ngIf="isLoggedIn" (click)="logout($event)"
+               class="dx-button dx-button-normal dx-button-mode-contained dx-widget dx-button-has-text"
+               aria-label="Create an account" tabindex="0" role="button">
+            <div class="dx-button-content"><span class="dx-button-text">Logoutt</span></div>
+          </div>
         </div>
       </div>
     </div>

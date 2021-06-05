@@ -26,8 +26,9 @@ export class NoopInterceptor implements HttpInterceptor {
             this.authService.logOut();
           }
           // TODO Handle error
-          AppNotify.error(error?.error?.message || 'Application Error');
-          return throwError(error.error);
+          error = error?.error || error;
+          AppNotify.error(error?.message || 'Application Error');
+          return throwError(error);
         }));
   }
 }

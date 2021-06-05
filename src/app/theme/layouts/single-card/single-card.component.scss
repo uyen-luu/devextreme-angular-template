@@ -5,11 +5,12 @@
   height: 100%;
 }
 
-.single-card {
+::ng-deep .single-card {
+  background-image: linear-gradient($base-accent, $base-bg);
   .dx-card {
-    width: 330px;
+    width: 400px;
     margin: auto auto;
-    padding: 40px;
+    padding: 40px 20px 20px;
     flex-grow: 0;
 
     :host-context(.screen-x-small) & {
@@ -30,12 +31,23 @@
         line-height: 28px;
         font-weight: 500;
         font-size: 24px;
+        text-align: center;
       }
 
       .description {
         color: rgba($base-text-color, alpha($base-text-color) * 0.7);
         line-height: 18px;
       }
+    }
+
+    .dx-field-item {
+      &.dx-field-item-optional, &.dx-field-button-item {
+        padding: 10px 0 !important;
+      }
+    }
+
+    .dx-button {
+      height: 40px;
     }
   }
 }

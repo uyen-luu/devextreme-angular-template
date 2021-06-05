@@ -17,13 +17,12 @@ import {AppStorage} from '@app/utilities';
 import {JwtModule} from '@auth0/angular-jwt';
 import {environment} from '@environment';
 import {NgxsSelectSnapshotModule} from '@ngxs-labs/select-snapshot';
-import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
 import {NgxsModule} from '@ngxs/store';
 
 //
 export function accessTokenGetter() {
-  return AppStorage.getTokenData(ACCESS_TOKEN_KEY);
+  return AppStorage.getData(ACCESS_TOKEN_KEY);
 }
 
 //
@@ -43,12 +42,11 @@ export function accessTokenGetter() {
         tokenGetter: accessTokenGetter,
         disallowedRoutes: [
           new RegExp('\/assets\/.*'),
-          new RegExp('\/login-form\/.*')
+          new RegExp('\/login\/.*')
         ]
       }
     }),
     NgxsModule.forRoot([UserState], { developmentMode: !environment.production }),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
     NgxsSelectSnapshotModule.forRoot()
   ],

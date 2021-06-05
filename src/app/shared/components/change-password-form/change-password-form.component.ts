@@ -29,7 +29,7 @@ export class ChangePasswordFormComponent implements OnInit {
     this.authService.changePassword(password, this.recoveryCode)
       .pipe(finalize(() => this.loading = false))
       .subscribe(() => {
-        this.router.navigate(['/login-form']);
+        this.router.navigate(['/login']);
       }, error => {
         AppNotify.error(error)
       });

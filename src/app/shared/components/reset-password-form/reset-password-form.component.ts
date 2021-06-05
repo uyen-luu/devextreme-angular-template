@@ -27,7 +27,7 @@ export class ResetPasswordFormComponent {
     await this.authService.resetPassword(email)
       .pipe(finalize(() => this.loading = false))
       .subscribe(() => {
-        this.router.navigate(['/login-form']);
+        this.router.navigate(['/login']);
         AppNotify.success(notificationText);
       }, error => {
         AppNotify.error(error);

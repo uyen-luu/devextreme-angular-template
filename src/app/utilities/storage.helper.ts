@@ -2,13 +2,12 @@ export class AppStorage {
   constructor() {
   }
 
-  static getTokenData(dataKey: string): string {
+  static getData(dataKey: string): string {
     const token = localStorage.getItem(dataKey);
-    return token ? decodeURIComponent(atob(token)) : '';
+    return !!token ? decodeURIComponent(atob(token)) : null;
   }
 
-  static storeTokenData(dataKey: string, data: any) {
+  static storeData(dataKey: string, data: any) {
     localStorage.setItem(dataKey, btoa(encodeURIComponent(data)));
   }
 }
-

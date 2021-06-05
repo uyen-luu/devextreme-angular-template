@@ -7,7 +7,7 @@ import {
   HttpInterceptor,
   HTTP_INTERCEPTORS
 } from '@angular/common/http';
-import {EC, JWK, JWT} from '@app/shared/constant';
+import {AppStorage, EC, JWK, JWT} from '@app/utilities';
 import {UserModel} from '@app/shared/models';
 import {AuthService} from '@app/shared/services';
 import {JwtHelperService} from '@auth0/angular-jwt';
@@ -16,7 +16,7 @@ import {delay, mergeMap, materialize, dematerialize, map} from 'rxjs/operators';
 
 // array in local storage for users
 const usersKey = 'angular-jwt-refresh-token-users';
-const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+let users = JSON.parse(AppStorage.getData(usersKey)) || [];
 
 // add test user and save if users array is empty
 if (!users.length) {
@@ -29,7 +29,7 @@ if (!users.length) {
     refreshTokens: [],
     avatarUrl: 'assets/images/avatar.jpg'
   });
-  localStorage.setItem(usersKey, JSON.stringify(users));
+  AppStorage.storeData(usersKey, JSON.stringify(users));
 }
 
 @Injectable()
@@ -73,13 +73,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     // route functions
     function authenticate() {
       const {username, password} = body;
+      getStoredUsers();
       const user = users.find(x => x.username === username && x.password === password);
 
       if (!user) return error('Username or password is incorrect');
 
       // add refresh token to user
       user.refreshTokens.push(generateRefreshToken());
-      localStorage.setItem(usersKey, JSON.stringify(users));
+      AppStorage.storeData(usersKey, JSON.stringify(users));
 
       return from(generateJwtToken(user)).pipe(map(jwtToken => {
         const body = new UserModel({
@@ -99,6 +100,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
       if (!refreshToken) return unauthorized();
 
+      getStoredUsers();
       const user = users.find(x => x.refreshTokens.includes(refreshToken));
 
       if (!user) return unauthorized();
@@ -106,7 +108,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       // replace old refresh token with a new one and save
       user.refreshTokens = user.refreshTokens.filter(x => x !== refreshToken);
       user.refreshTokens.push(generateRefreshToken());
-      localStorage.setItem(usersKey, JSON.stringify(users));
+      AppStorage.storeData(usersKey, JSON.stringify(users));
 
       return from(generateJwtToken(user)).pipe(map(jwtToken => {
         const body = new UserModel({
@@ -125,18 +127,19 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       if (!isLoggedIn()) return unauthorized();
 
       const refreshToken = getRefreshToken();
+      getStoredUsers();
       const user = users.find(x => x.refreshTokens.includes(refreshToken));
 
       // revoke token and save
       user.refreshTokens = user.refreshTokens.filter(x => x !== refreshToken);
-      localStorage.setItem(usersKey, JSON.stringify(users));
+      AppStorage.storeData(usersKey, JSON.stringify(users));
 
       return ok();
     }
 
     function getUsers() {
       if (!isLoggedIn()) return unauthorized();
-      const tokenInfo = JWT.parseJwt(currentToken());
+      const tokenInfo = JWT.getPayloadData(currentToken());
       const user = users.find(_ => _.id === tokenInfo.sub);
       return ok(user);
     }
@@ -191,6 +194,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     function getRefreshToken() {
       // get refresh token from cookie
       return (document.cookie.split(';').find(x => x.includes('fakeRefreshToken')) || '=').split('=')[1];
+    }
+
+    function getStoredUsers() {
+      users = JSON.parse(AppStorage.getData(usersKey)) || [];
     }
   }
 }

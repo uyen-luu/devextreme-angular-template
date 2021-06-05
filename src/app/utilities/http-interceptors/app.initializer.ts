@@ -10,8 +10,8 @@ export function appInitializer(authService: AuthService, jwtService: JwtHelperSe
       if (!!jwtService.tokenGetter()) {
         if (jwtService.isTokenExpired()) {
           return authService.refreshToken()
-            .subscribe((token) => {
-              AppStorage.storeTokenData(ACCESS_TOKEN_KEY, token);
+            .subscribe((user) => {
+              AppStorage.storeData(ACCESS_TOKEN_KEY, user.jwtToken);
             })
             .add(resolve);
         } else {

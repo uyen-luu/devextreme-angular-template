@@ -44,7 +44,7 @@ export class AuthService {
       password
     }, {withCredentials: true})
       .pipe(map(user => {
-        AppStorage.storeTokenData(ACCESS_TOKEN_KEY, user.jwtToken);
+        AppStorage.storeData(ACCESS_TOKEN_KEY, user.jwtToken);
         this.store.dispatch(new SetLoggedUser(user));
         this.startRefreshTokenTimer();
         this.router.navigate([this._lastAuthenticatedPath]);
@@ -53,15 +53,18 @@ export class AuthService {
   }
 
   logOut() {
-    this.http.post<any>(`${environment.apiUrl}/user/revoke-token`, {}, {withCredentials: true}).subscribe(() =>{
+    this.http.post<any>(`${environment.apiUrl}/user/revoke-token`, {}, {withCredentials: true}).subscribe(() => {
       this.stopRefreshTokenTimer();
-      AppStorage.storeTokenData(ACCESS_TOKEN_KEY, '');
+      AppStorage.storeData(ACCESS_TOKEN_KEY, '');
       this.store.dispatch(new SetLoggedUser(null));
-      this.router.navigate(['/login-form']);
-    })
+      this.router.navigate(['/login']);
+    });
   }
 
-  refreshToken() {
+  refreshToken(): Observable<UserModel> {
+    if (!environment.production) {
+      console.log('refreshToken');
+    }
     return this.http.post<any>(`${environment.apiUrl}/user/refresh-token`, {}, {withCredentials: true})
       .pipe(map((user) => {
         this.store.dispatch(new SetLoggedUser(user));
@@ -95,7 +98,7 @@ export class AuthService {
 
   private startRefreshTokenTimer() {
     // set a timeout to refresh the token a minute before it expires
-    const expires =  this.jwtHelper.getTokenExpirationDate();
+    const expires = this.jwtHelper.getTokenExpirationDate();
     const timeout = expires.getTime() - Date.now() - (60 * 1000);
     this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
   }
@@ -113,7 +116,7 @@ export class AuthGuardService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;
     const isAuthForm = [
-      'login-form',
+      'login',
       'reset-password',
       'create-account',
       'change-password/:recoveryCode'
@@ -126,7 +129,7 @@ export class AuthGuardService implements CanActivate {
     }
 
     if (!isLoggedIn && !isAuthForm) {
-      this.router.navigate(['/login-form']);
+      this.router.navigate(['/login']);
     }
 
     if (isLoggedIn) {

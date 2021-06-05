@@ -23,7 +23,7 @@ export class CreateAccountFormComponent {
     this.authService.createAccount(email, password)
       .pipe(finalize(() => this.loading = false))
       .subscribe(() => {
-        this.router.navigate(['/login-form']);
+        this.router.navigate(['/login']);
       }, error => {
         AppNotify.error(error)
       });

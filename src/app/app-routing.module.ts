@@ -27,7 +27,7 @@ const routes: Routes = [
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'login-form',
+    path: 'login',
     component: LoginFormComponent,
     canActivate: [ AuthGuardService ]
   },
