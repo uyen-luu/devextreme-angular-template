@@ -1,0 +1,6 @@
+<div class="title">
+	<div>{{title}}</div>
+	<span (mouseenter)="isVisible = true" (mouseout)="isVisible = false"
+		  [ngStyle]="{'color': isVisible ? '#333' : '#fff'}"
+		  (click)="closePopover()"><i class="fas fa-times"></i></span>
+</div>

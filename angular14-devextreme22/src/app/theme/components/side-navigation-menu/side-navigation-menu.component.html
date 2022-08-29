@@ -1,0 +1,17 @@
+<ng-content></ng-content>
+
+<div class="menu-container d-flex flex-column">
+  <dx-tree-view
+    [items]="items"
+    keyExpr="path"
+    selectionMode="single"
+    [focusStateEnabled]="false"
+    expandEvent="click"
+    (onItemClick)="onItemClick($event)"
+    width="100%">
+  </dx-tree-view>
+
+  <app-footer>
+    Copyright © {{appInfo.currentYear}} {{appInfo.author}}
+  </app-footer>
+</div>

@@ -1,0 +1,53 @@
+@import "variables";
+
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .single-card {
+  background-image: linear-gradient($base-accent, $base-bg);
+  .dx-card {
+    width: 400px;
+    margin: auto auto;
+    padding: 40px 20px 20px;
+    flex-grow: 0;
+
+    :host-context(.screen-x-small) & {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+      margin: 0;
+      border: 0;
+      flex-grow: 1;
+    }
+
+    .header {
+      margin-bottom: 30px;
+
+      .title {
+        color: $base-text-color;
+        line-height: 28px;
+        font-weight: 500;
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .description {
+        color: rgba($base-text-color, alpha($base-text-color) * 0.7);
+        line-height: 18px;
+      }
+    }
+
+    .dx-field-item {
+      &.dx-field-item-optional, &.dx-field-button-item {
+        padding: 10px 0 !important;
+      }
+    }
+
+    .dx-button {
+      height: 40px;
+    }
+  }
+}

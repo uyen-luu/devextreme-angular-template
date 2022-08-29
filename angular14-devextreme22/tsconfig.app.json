@@ -1,0 +1,34 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": [],
+    "paths": {
+      "jszip": [
+        "node_modules/jszip/dist/jszip.min.js"
+      ],
+      "@app/*": ["app/*"],
+      "@app/shared": ["app/shared/*.ts"],
+      "@app/shared/services": ["app/shared/services/index.ts"],
+      "@app/shared/models": ["app/shared/models/index.ts"],
+      "@app/shared/components": ["app/shared/components/index.ts"],
+      "@app/modules/*": ["app/modules/*.ts", "app/shared/*.module.ts", "app/theme/*.module.ts"],
+      "@environment": [
+        "environments/environment.ts"
+      ]
+    }
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts",
+    "src/***/**/*.ts",
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "exclude": [
+    "src/environments/*.prod.ts"
+  ]
+}

@@ -1,0 +1,16 @@
+.confirm-box {
+	min-width: 200px;
+}
+
+.confirm-popup-title {
+	font-size: 14px;
+	color: #333;
+	font-weight: 600;
+}
+
+// This is for Safari
+::ng-deep .popover-title.dx-toolbar-center {
+	.dx-toolbar-label {
+		max-width: none !important;
+	}
+}

@@ -1,0 +1,36 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "es2020",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "jszip": ["node_modules/jszip/dist/jszip.min.js"],
+      "@app/*": ["app/*"],
+      "@app/shared": ["app/shared/*.ts"],
+      "@app/shared/services": ["app/shared/services/index.ts"],
+      "@app/shared/models": ["app/shared/models/index.ts"],
+      "@app/shared/components": ["app/shared/components/index.ts"],
+      "@app/modules/*": [
+        "app/modules/*.ts",
+        "app/shared/*.module.ts",
+        "app/theme/*.module.ts"
+      ],
+      "@environment": ["environments/environment.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "suppressImplicitAnyIndexErrors": true
+  }
+}
